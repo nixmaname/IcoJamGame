@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI text;
     float timerDisplay = 3f;
+    bool waitForGround;
 
     private void Awake()
     {
@@ -84,6 +85,11 @@ public class PlayerController : MonoBehaviour
         }
         if (isGrounded)
         {
+            if (waitForGround)
+            {
+                ResetRecorder();
+            }
+
             if (rb.gravityScale != regularGravity)
                 rb.gravityScale = regularGravity;
 
@@ -156,11 +162,22 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Ghost"))
         {
+            waitForGround = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             coyoteTimer = 0f;
-            other.transform.position = transform.position;
+            //other.transform.position = transform.position;
             transform.GetComponent<Recorder>().cc = other.transform.GetComponent<CopyCat>();
             other.gameObject.SetActive(false);
         }
+    }
+
+    void ResetRecorder()
+    {
+        transform.GetComponent<Recorder>().timer = 0;
+        transform.GetComponent<Recorder>().oldpos = transform.position;
+        transform.GetComponent<Recorder>().canPress = true;
+        transform.GetComponent<Recorder>().canRecord = true; 
+        transform.GetComponent<Recorder>().cc.gameObject.transform.position = transform.position;
+        waitForGround = false;
     }
 }
