@@ -4,7 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Ghost
+=======
+>>>>>>> MoqBrach
+  - Waypoint
   layers:
   - Default
   - TransparentFX
