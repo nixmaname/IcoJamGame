@@ -332,6 +332,9 @@ GameObject:
   - component: {fileID: 247095613}
   - component: {fileID: 247095612}
   - component: {fileID: 247095608}
+  - component: {fileID: 247095611}
+  - component: {fileID: 247095609}
+  - component: {fileID: 247095610}
   m_Layer: 6
   m_Name: Ghost1
   m_TagString: Ghost
@@ -479,10 +482,10 @@ MonoBehaviour:
   groundCheckRadius: 0.1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   wallLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   coyoteTime: 0.05
   isGrounded: 0
   leftWall: 0
