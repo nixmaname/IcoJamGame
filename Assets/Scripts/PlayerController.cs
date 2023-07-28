@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
         if (timerDisplay > 0)
         {
             timerDisplay -= Time.deltaTime;
@@ -150,5 +151,16 @@ public class PlayerController : MonoBehaviour
         }
 
         
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Ghost"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            coyoteTimer = 0f;
+            other.transform.position = transform.position;
+            transform.GetComponent<Recorder>().cc = other.transform.GetComponent<CopyCat>();
+            other.gameObject.SetActive(false);
+        }
     }
 }

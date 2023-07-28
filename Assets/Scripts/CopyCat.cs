@@ -9,6 +9,13 @@ public class CopyCat : MonoBehaviour
     public int timer;
     bool stop;
 
+    private BoxCollider2D col;
+    int counter;
+
+    private void Start()
+    {
+        col = GetComponent<BoxCollider2D>();
+    }
     private void Update()
     {
         if (!stop)
@@ -17,13 +24,21 @@ public class CopyCat : MonoBehaviour
             if (rec.ContainsKey(timer))
             {
                 transform.position = rec[timer];
+                counter++;
+            }
+            if (counter >= rec.Count)
+            {
+                col.enabled = true;
+                stop = true;
+                Debug.Log("JUMPY");
             }
         }
-
-        if(transform.position == rec[rec.Count])
-        {
-            stop = true;
-            gameObject.tag = "Untagged";
-        }
+    }
+    private void OnDisable()
+    {
+        rec.Clear();
+        Debug.Log(rec.Count);
+        timer = 0;
+        stop = false;
     }
 }

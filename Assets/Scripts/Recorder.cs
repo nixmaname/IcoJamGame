@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Recorder : MonoBehaviour
 {
-    Transform player;
     Vector3 oldpos;
     public CopyCat cc;
     public int timer;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         oldpos = transform.position;
     }
 
@@ -28,6 +26,8 @@ public class Recorder : MonoBehaviour
         {
             cc.gameObject.SetActive(true);
             cc = null;
+            timer = 0;
+            oldpos = transform.position;
         }
     }
 }
