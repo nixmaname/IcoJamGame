@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CopyCat : MonoBehaviour
 {
-    public Dictionary<int, Vector3> rec = new Dictionary<int, Vector3>();
+    public LimitedDictionary<int, Vector3> rec = new LimitedDictionary<int, Vector3>();
     public float remover;
     public int timer;
     public bool stop;
@@ -19,19 +19,16 @@ public class CopyCat : MonoBehaviour
     }
     private void Update()
     {
-        
-
         if (!stop)
         {
-            
+            //Replayvame ot Recorder
             timer++;
             if (rec.ContainsKey(timer))
             {
                 transform.position = rec[timer];
                 counter++;
-                Debug.Log(timer);
             }
-            if (counter >= rec.Count)
+            if (timer >= rec.lastKey || counter >= rec.Count)
             {
                 col.enabled = true;
                 stop = true;
@@ -40,6 +37,7 @@ public class CopyCat : MonoBehaviour
     }
     private void OnDisable()
     {
+        //Restartirame
         col.enabled = false;
         rec.Clear();
         timer = 0;

@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class Recorder : MonoBehaviour
 {
+    //Toq script zapisva poziciite na playera v limited dictionary v CopyCat
+
     public Vector3 oldpos;
     public CopyCat cc;
     public int timer;
     public bool canPress = true;
     public bool canRecord = true;
 
-    Dictionary<int, string> test = new Dictionary<int, string>(); 
     // Start is called before the first frame update
     void Start()
     {
@@ -22,21 +23,27 @@ public class Recorder : MonoBehaviour
     void Update()
     {
         timer++;
-        if (cc != null && cc.rec.Count > 200)
-        {
-            cc.rec.Remove(cc.rec.Keys.First());
-        }
+       
+        //Zapisvame poziciqta samo ako ima promqna v poziciite
         if (transform.position != oldpos && cc != null && canRecord)
         {
             cc.rec.Add(timer, transform.position);
             oldpos = transform.position;
         }
+        //F - spawnvame duhcheto da povtori dvijeniqta i mahame 400 za da sverim timerite na Recorder i CopyCat
+        // timerite slujat za tyrsene na keys v dictionaritata
         if (Input.GetKeyDown(KeyCode.F) && cc != null && canPress)
         {
             cc.gameObject.SetActive(true);
-            cc.timer = cc.rec.Keys.First();
-            cc.counter = cc.timer;
-            Debug.Log(cc.rec.Keys.First());
+            if (timer - 400 >= 0)
+            {
+                cc.timer = timer - 400;
+            }
+            else
+            {
+                cc.timer = 0;
+            }
+            cc.counter = 0;
             cc = null;
             canPress = false;
             canRecord = false;
