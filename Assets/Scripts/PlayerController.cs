@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +11,9 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck, leftCheck, rightCheck;
     public float groundCheckRadius = 0.1f;
     public LayerMask groundLayer;
+
+    public LayerMask groundLayerTemp;
+
     public LayerMask wallLayer;
     public float coyoteTime = 0.1f; // Adjust this value for the grace period
 
@@ -25,12 +27,22 @@ public class PlayerController : MonoBehaviour
     private Vector2 jumpTo;
     private BoxCollider2D col;
 
+
     public TextMeshProUGUI text;
     float timerDisplay = 3f;
-    bool waitForGround,hasflipped;
+    bool waitForGround, hasflipped;
     bool facingRight = true;
     SpriteRenderer sr;
+
+    /// <summary>
+    /// TempPlatforms only
+    /// </summary>
+    //public TextMeshProUGUI timerText;
+
+    private float timer = 0;
+    private float elapsedTime = 3;
     
+    private Collider2D colTemp;
 
     private void Awake()
     {
@@ -48,7 +60,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-
         if (timerDisplay > 0)
         {
             timerDisplay -= Time.deltaTime;
@@ -58,7 +69,7 @@ public class PlayerController : MonoBehaviour
             timerDisplay = 3f;
         }
 
-        if((rb.velocity.x > 0 && !facingRight) || (rb.velocity.x < 0 && facingRight))
+        if ((rb.velocity.x > 0 && !facingRight) || (rb.velocity.x < 0 && facingRight))
         {
             Flip();
         }
@@ -74,6 +85,8 @@ public class PlayerController : MonoBehaviour
         {
             //Ako otivame nadolu imame collider i mojem da checkvame grounda
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+            colTemp = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerTemp);
+
             col.isTrigger = false;
         }
         else
@@ -182,8 +195,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        CallTempCoroutine();
 
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ghost"))
@@ -198,7 +213,7 @@ public class PlayerController : MonoBehaviour
             transform.GetComponent<Recorder>().cc = other.transform.GetComponent<CopyCat>();
             other.gameObject.SetActive(false);
         }
-        
+
     }
 
     void ResetRecorder()
@@ -221,5 +236,22 @@ public class PlayerController : MonoBehaviour
         sr.flipX = !sr.flipX;
 
         facingRight = !facingRight;
+    }
+
+
+
+    void CallTempCoroutine()
+    {
+        if (colTemp != null)
+        {
+            elapsedTime -= Time.deltaTime;
+            text.text = elapsedTime.ToString("0") + "...";
+            if (elapsedTime <= timer) {
+                Destroy(colTemp.gameObject);
+                elapsedTime = 0;
+                text.text = "";
+
+            }
+        }
     }
 }
