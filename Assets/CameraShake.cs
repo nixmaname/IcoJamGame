@@ -15,9 +15,12 @@ public class CameraShake : MonoBehaviour
 
     private const float timeBeforeExplosion = 3;
 
+    Recorder rec;
+
     private void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
+        rec = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<Recorder>();
     }
 
     private void Update()
@@ -33,23 +36,21 @@ public class CameraShake : MonoBehaviour
                 shakeTime = 0;
             }
         }
-        if (Input.GetKeyDown(KeyCode.F)) {
-            StartCoroutine(Shake());
-        }
     }
 
-    IEnumerator Shake()
+    public IEnumerator Shake()
     {
         float timeLeft = 3f;
         while (timeLeft >= 0)
         {
             timeLeft -= Time.deltaTime;
-            timerText.text = timeLeft.ToString("0") + "...";
+            timerText.text = timeLeft.ToString("F1") + "...";
             Debug.Log((int)timeLeft);
             yield return null;
         }
         timerText.text = "";
-        Skaking(5f, 0.1f);         
+        Skaking(5f, 0.1f);
+        
         //CinemachineBasicMultiChannelPerlin noice = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         //explosion.Play();
         //noice.m_AmplitudeGain = intensity;
@@ -64,6 +65,7 @@ public class CameraShake : MonoBehaviour
         noice.m_AmplitudeGain = intensity;
 
         shakeTime = time;
+        rec.Unalive();
         //StartCoroutine(Shake(5f, 0.1f));
     }
 }

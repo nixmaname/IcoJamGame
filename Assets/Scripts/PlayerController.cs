@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private float timer = 0;
     private float elapsedTime = 3;
-    
+
     private Collider2D colTemp;
 
     private void Awake()
@@ -85,7 +85,16 @@ public class PlayerController : MonoBehaviour
         {
             //Ako otivame nadolu imame collider i mojem da checkvame grounda
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-            colTemp = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerTemp);
+            if (colTemp == null)
+                colTemp = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerTemp);
+            else
+            {
+                Collider2D temp = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerTemp);
+                if(temp != colTemp)
+                {
+                    DestroyPlatform();
+                }
+            }
 
             col.isTrigger = false;
         }
@@ -192,10 +201,15 @@ public class PlayerController : MonoBehaviour
                     rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                     coyoteTimer = 0f; // Reset the timer after the jump
                 }
+
+                if(colTemp != null)
+                {
+                    DestroyPlatform();
+                }
             }
         }
 
-        CallTempCoroutine();
+        //CallTempCoroutine();
 
     }
 
@@ -240,13 +254,21 @@ public class PlayerController : MonoBehaviour
 
 
 
+    void DestroyPlatform()
+    {
+        DyingPlatform dp = colTemp.GetComponent<DyingPlatform>();
+        dp.AnimStart();
+        colTemp = null;
+    }
+
     void CallTempCoroutine()
     {
         if (colTemp != null)
         {
             elapsedTime -= Time.deltaTime;
             text.text = elapsedTime.ToString("0") + "...";
-            if (elapsedTime <= timer) {
+            if (elapsedTime <= timer)
+            {
                 Destroy(colTemp.gameObject);
                 elapsedTime = 0;
                 text.text = "";

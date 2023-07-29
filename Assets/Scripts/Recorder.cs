@@ -12,6 +12,8 @@ public class Recorder : MonoBehaviour
     public int timer;
     public bool canPress = true;
     public bool canRecord = true;
+    CameraShake camShake;
+    PlayerSafe playerSafe;
 
     int fps;
     float sec;
@@ -21,6 +23,8 @@ public class Recorder : MonoBehaviour
     void Start()
     {
         oldpos = transform.position;
+        camShake = Camera.main.transform.GetComponent<CameraShake>();
+        playerSafe = GetComponent<PlayerSafe>();
     }
 
     // Update is called once per frame
@@ -34,7 +38,7 @@ public class Recorder : MonoBehaviour
         else
         {
             sec = 0;
-            averageFps = fps*4;
+            averageFps = fps * 4;
             fps = 0;
             if (cc != null)
             {
@@ -43,7 +47,7 @@ public class Recorder : MonoBehaviour
         }
 
         timer++;
-       
+
         //Zapisvame poziciqta samo ako ima promqna v poziciite
         if (transform.position != oldpos && cc != null && canRecord)
         {
@@ -54,19 +58,29 @@ public class Recorder : MonoBehaviour
         // timerite slujat za tyrsene na keys v dictionaritata
         if (Input.GetKeyDown(KeyCode.F) && cc != null && canPress)
         {
-            cc.gameObject.SetActive(true);
-            if (timer - averageFps >= 0)
-            {
-                cc.timer = timer - averageFps;
-            }
-            else
-            {
-                cc.timer = 0;
-            }
-            cc.counter = 0;
-            cc = null;
+            camShake.StartCoroutine(camShake.Shake());
+            
             canPress = false;
-            canRecord = false;
         }
+
+    }
+    public void Unalive()
+    {
+        cc.gameObject.SetActive(true);
+        if (timer - averageFps >= 0)
+        {
+            cc.timer = timer - averageFps;
+        }
+        else
+        {
+            cc.timer = 0;
+        }
+        cc.counter = 0;
+        transform.position = playerSafe.lastSafepoint;
+        cc.transform.position = transform.position;
+        cc = null;
+        canRecord = false;
+
+
     }
 }
