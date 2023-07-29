@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
             timerDisplay = 3f;
         }
 
-        text.text = timerDisplay.ToString("F1");
+        //text.text = timerDisplay.ToString("F1");
 
         // Check if the player is on the ground or in the grace period
         leftWall = Physics2D.OverlapCircle(leftCheck.position, groundCheckRadius / 4, wallLayer);
