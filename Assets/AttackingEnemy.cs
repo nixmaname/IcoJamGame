@@ -57,7 +57,7 @@ public class AttackingEnemy : Enemy
 
     private void Chase() {
         Vector2 dir = (target.transform.position - transform.position).normalized;
-
+        Debug.DrawLine(transform.position, target.transform.position);
         transform.Translate(dir * chasingSpeed * Time.deltaTime);
     }
 }

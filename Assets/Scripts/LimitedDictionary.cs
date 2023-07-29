@@ -9,7 +9,7 @@ public class LimitedDictionary<TKey, TValue>
 
     private readonly Dictionary<TKey, TValue> dictionary = new Dictionary<TKey, TValue>(); // dictionaryto
     private readonly Queue<TKey> insertionOrder = new Queue<TKey>(); // Queue da sverqva ordera na dictionaryto 
-    private int maxSize = 400; // V recorder scripta  cc.timer = timer - x; kydeto x e maxSize
+    public int maxSize = 800; // V recorder scripta  cc.timer = timer - x; kydeto x e maxSize
     private TKey oldestKey;
     public TKey lastKey; 
 

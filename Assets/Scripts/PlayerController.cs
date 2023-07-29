@@ -27,10 +27,14 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI text;
     float timerDisplay = 3f;
-    bool waitForGround;
+    bool waitForGround,hasflipped;
+    bool facingRight = true;
+    SpriteRenderer sr;
+    
 
     private void Awake()
     {
+        sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityInc; // Adjust the gravity to your preference
         regularGravity = gravityInc;
@@ -39,6 +43,7 @@ public class PlayerController : MonoBehaviour
         // If groundCheck is not assigned, use the player's transform as the groundCheck
         if (groundCheck == null)
             groundCheck = transform;
+
     }
 
     private void Update()
@@ -51,6 +56,11 @@ public class PlayerController : MonoBehaviour
         else
         {
             timerDisplay = 3f;
+        }
+
+        if((rb.velocity.x > 0 && !facingRight) || (rb.velocity.x < 0 && facingRight))
+        {
+            Flip();
         }
 
         //text.text = timerDisplay.ToString("F1");
@@ -112,6 +122,11 @@ public class PlayerController : MonoBehaviour
             coyoteTimer -= Time.deltaTime;
             if ((leftWall || rightWall) && rb.velocity.y < 0)
             {
+                if (!hasflipped)
+                {
+                    Flip();
+                    hasflipped = true;
+                }
                 //Ako padame nadolu i sme dokosnati do stena napravi gravitaciqta niska vse edno se plyzgame bavno
                 rb.gravityScale = wallGravity;
                 rb.velocity = Vector2.zero;
@@ -149,12 +164,14 @@ public class PlayerController : MonoBehaviour
                     rb.velocity = new Vector2(moveSpeed, jumpForce);
                     jumpTo = new Vector2(1, 0);
                     cannotMove = true;
+                    hasflipped = false;
                 }
                 else if (rightWall)
                 {
                     rb.velocity = new Vector2(-moveSpeed, jumpForce);
                     jumpTo = new Vector2(-1, 0);
                     cannotMove = true;
+                    hasflipped = false;
                 }
                 else
                 {
@@ -181,6 +198,7 @@ public class PlayerController : MonoBehaviour
             transform.GetComponent<Recorder>().cc = other.transform.GetComponent<CopyCat>();
             other.gameObject.SetActive(false);
         }
+        
     }
 
     void ResetRecorder()
@@ -196,5 +214,12 @@ public class PlayerController : MonoBehaviour
         rec.canRecord = true;
         rec.cc.gameObject.transform.position = transform.position;
         waitForGround = false;
+    }
+
+    void Flip()
+    {
+        sr.flipX = !sr.flipX;
+
+        facingRight = !facingRight;
     }
 }

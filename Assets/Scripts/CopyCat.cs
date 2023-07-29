@@ -13,6 +13,7 @@ public class CopyCat : MonoBehaviour
     private BoxCollider2D col;
     public int counter;
 
+
     private void Start()
     {
         col = GetComponent<BoxCollider2D>();
