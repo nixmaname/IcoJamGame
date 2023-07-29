@@ -13,10 +13,14 @@ public class CopyCat : MonoBehaviour
     private BoxCollider2D col;
     public int counter;
 
+    GameObject leftWing, rightWing;
+
 
     private void Start()
     {
         col = GetComponent<BoxCollider2D>();
+        leftWing = transform.GetChild(0).gameObject;
+        rightWing = transform.GetChild(1).gameObject;
     }
     private void Update()
     {
@@ -33,6 +37,8 @@ public class CopyCat : MonoBehaviour
             {
                 col.enabled = true;
                 stop = true;
+                leftWing.SetActive(true);
+                rightWing.SetActive(true);
             }
         }
     }
@@ -44,5 +50,8 @@ public class CopyCat : MonoBehaviour
         timer = 0;
         stop = false;
         counter = 0;
+        leftWing.SetActive(false);
+        rightWing.SetActive(false);
+
     }
 }
