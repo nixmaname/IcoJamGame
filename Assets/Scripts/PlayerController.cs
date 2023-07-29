@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshProUGUI text;
     float timerDisplay = 3f;
+    bool waitForGround;
 
     private void Awake()
     {
@@ -52,25 +53,27 @@ public class PlayerController : MonoBehaviour
             timerDisplay = 3f;
         }
 
-        text.text = timerDisplay.ToString("F1");
-        
+        //text.text = timerDisplay.ToString("F1");
+
         // Check if the player is on the ground or in the grace period
-        leftWall = Physics2D.OverlapCircle(leftCheck.position, groundCheckRadius/4, wallLayer);
-        rightWall = Physics2D.OverlapCircle(rightCheck.position, groundCheckRadius/4, wallLayer);
+        leftWall = Physics2D.OverlapCircle(leftCheck.position, groundCheckRadius / 4, wallLayer);
+        rightWall = Physics2D.OverlapCircle(rightCheck.position, groundCheckRadius / 4, wallLayer);
 
 
         if (rb.velocity.y <= 0)
         {
+            //Ako otivame nadolu imame collider i mojem da checkvame grounda
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
             col.isTrigger = false;
         }
         else
         {
+            //Ako otivame nagore nqmame collider
             isGrounded = false;
             col.isTrigger = true;
         }
 
-        if(leftWall || rightWall)
+        if (leftWall || rightWall)
         {
             if (col.isTrigger)
             {
@@ -80,10 +83,16 @@ public class PlayerController : MonoBehaviour
 
         if ((!leftWall && !rightWall) && rb.gravityScale != regularGravity)
         {
+            //Ako ne sme zalepnali na stenata - opravqme gravitaciqta
             rb.gravityScale = regularGravity;
         }
         if (isGrounded)
         {
+            if (waitForGround)
+            {
+                ResetRecorder();
+            }
+
             if (rb.gravityScale != regularGravity)
                 rb.gravityScale = regularGravity;
 
@@ -93,6 +102,7 @@ public class PlayerController : MonoBehaviour
 
             if (leftWall || rightWall)
             {
+                //Ako sme na zemqta i sme do stenata - ne vzimame pod vnimanie stenite
                 leftWall = false;
                 rightWall = false;
             }
@@ -102,6 +112,7 @@ public class PlayerController : MonoBehaviour
             coyoteTimer -= Time.deltaTime;
             if ((leftWall || rightWall) && rb.velocity.y < 0)
             {
+                //Ako padame nadolu i sme dokosnati do stena napravi gravitaciqta niska vse edno se plyzgame bavno
                 rb.gravityScale = wallGravity;
                 rb.velocity = Vector2.zero;
             }
@@ -110,12 +121,16 @@ public class PlayerController : MonoBehaviour
         // Handle horizontal movement
         if ((!leftWall && !rightWall) && !cannotMove)
         {
+            //Ne mojem da hodim ako sme na stena
+            //Ne mojem da hodim ako sme bili na stena, skochili sme i y velocitito e positivno
             float moveInput = Input.GetAxisRaw("Horizontal");
             rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 
         }
         if (cannotMove)
         {
+            //Ako tykmo sme skochili ot stena dokato velocitito e positivno skachame prinuditelno kym protivopolojnata posoka
+            //Vmesto pozitivno y, za sega e nad -1.5f za da ne moje da se katerish po stena
             rb.velocity = new Vector2(jumpTo.x * moveSpeed, rb.velocity.y);
             if (rb.velocity.y < -1.5f)
             {
@@ -150,17 +165,36 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        
+
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ghost"))
         {
+            //Skachame
+            waitForGround = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             coyoteTimer = 0f;
-            other.transform.position = transform.position;
+            //other.transform.position = transform.position;
+
+            //skrivame duhcheto
             transform.GetComponent<Recorder>().cc = other.transform.GetComponent<CopyCat>();
             other.gameObject.SetActive(false);
         }
+    }
+
+    void ResetRecorder()
+    {
+        //Zapochvame zapis na pozicii
+        Recorder rec;
+        rec = transform.GetComponent<Recorder>();
+
+        //Nulirame vsichko
+        rec.timer = 0;
+        rec.oldpos = transform.position;
+        rec.canPress = true;
+        rec.canRecord = true;
+        rec.cc.gameObject.transform.position = transform.position;
+        waitForGround = false;
     }
 }
