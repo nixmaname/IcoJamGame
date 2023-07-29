@@ -13,6 +13,10 @@ public class Recorder : MonoBehaviour
     public bool canPress = true;
     public bool canRecord = true;
 
+    int fps;
+    float sec;
+    int averageFps;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +26,22 @@ public class Recorder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (sec < 1)
+        {
+            sec += Time.deltaTime;
+            fps++;
+        }
+        else
+        {
+            sec = 0;
+            averageFps = fps*4;
+            fps = 0;
+            if (cc != null)
+            {
+                cc.rec.maxSize = averageFps;
+            }
+        }
+
         timer++;
        
         //Zapisvame poziciqta samo ako ima promqna v poziciite
@@ -35,9 +55,9 @@ public class Recorder : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F) && cc != null && canPress)
         {
             cc.gameObject.SetActive(true);
-            if (timer - 400 >= 0)
+            if (timer - averageFps >= 0)
             {
-                cc.timer = timer - 400;
+                cc.timer = timer - averageFps;
             }
             else
             {
