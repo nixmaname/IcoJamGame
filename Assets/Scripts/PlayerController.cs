@@ -270,6 +270,10 @@ public class PlayerController : MonoBehaviour
             Instantiate(deadthParticle, transform.position - new Vector3(0, 0.25f, 0), Quaternion.identity);
             rec.Restart();
         }
+        if (other.CompareTag("Coin"))
+        {
+            other.gameObject.SetActive(false);
+        }
 
     }
 

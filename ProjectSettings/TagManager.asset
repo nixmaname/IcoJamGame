@@ -10,6 +10,9 @@ TagManager:
   - SafePoint
   - Death
   - Escape
+  - Coin
+  - PhantomP
+  - LevelPanel
   layers:
   - Default
   - TransparentFX

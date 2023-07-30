@@ -18,6 +18,10 @@ public class Recorder : MonoBehaviour
     int fps;
     float sec;
     int averageFps;
+    GameObject[] platforms;
+    GameObject[] phantomPlatform;
+    GameObject[] phantomCoin;
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +29,9 @@ public class Recorder : MonoBehaviour
         oldpos = transform.position;
         camShake = Camera.main.transform.GetComponent<CameraShake>();
         playerSafe = GetComponent<PlayerSafe>();
+        platforms = GameObject.FindGameObjectsWithTag("TempPlatform");
+        phantomPlatform = GameObject.FindGameObjectsWithTag("PhantomP");
+        phantomCoin = GameObject.FindGameObjectsWithTag("Coin");
     }
 
     // Update is called once per frame
@@ -86,10 +93,38 @@ public class Recorder : MonoBehaviour
         cc.transform.position = transform.position;
         cc = null;
         canRecord = false;
+        foreach (var dp in platforms)
+        {
+            if (!dp.activeSelf)
+                dp.SetActive(true);
+        }
+        foreach (var phantom in phantomPlatform)
+        {
+            phantom.GetComponent<BoxCollider2D>().enabled = false;
+            phantom.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0.25f);
+        }
+        foreach (var coin in phantomCoin)
+        {
+            coin.SetActive(true);
+        }
     }
 
     public void Restart()
     {
+        foreach (var dp in platforms)
+        {
+            if (!dp.activeSelf)
+                dp.SetActive(true);
+        }
+        foreach (var phantom in phantomPlatform)
+        {
+            phantom.GetComponent<BoxCollider2D>().enabled = false;
+            phantom.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.25f);
+        }
+        foreach (var coin in phantomCoin)
+        {
+            coin.SetActive(true);
+        }
         if (cc == null)
             cc = GameObject.FindGameObjectWithTag("Ghost").GetComponent<CopyCat>();
         transform.GetComponent<PlayerController>().imobilize = true;
@@ -102,6 +137,8 @@ public class Recorder : MonoBehaviour
         camShake.timeLeft = 0;
         canPress = true;
         canRecord = true;
+
+
     }
 
 

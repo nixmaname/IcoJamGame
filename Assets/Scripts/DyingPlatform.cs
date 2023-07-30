@@ -15,6 +15,6 @@ public class DyingPlatform : MonoBehaviour
     }
     public void Dissapear()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
