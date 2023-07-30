@@ -30,6 +30,11 @@ public class Recorder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Restart();
+        }
+
         if (sec < 1)
         {
             sec += Time.deltaTime;
@@ -59,7 +64,7 @@ public class Recorder : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F) && cc != null && canPress)
         {
             camShake.StartCoroutine(camShake.Shake());
-            
+
             canPress = false;
         }
 
@@ -82,5 +87,22 @@ public class Recorder : MonoBehaviour
         cc = null;
         canRecord = false;
     }
-    
+
+    public void Restart()
+    {
+        if (cc == null)
+            cc = GameObject.FindGameObjectWithTag("Ghost").GetComponent<CopyCat>();
+        transform.GetComponent<PlayerController>().imobilize = true;
+        cc.counter = 0;
+        transform.position = playerSafe.lastSafepoint;
+        cc.transform.position = transform.position;
+        oldpos = transform.position;
+        timer = 0;
+        cc.AngelReset();
+        camShake.timeLeft = 0;
+        canPress = true;
+        canRecord = true;
+    }
+
+
 }

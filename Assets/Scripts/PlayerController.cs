@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public bool cannotMove = false;
     private Vector2 jumpTo;
     private BoxCollider2D col;
+    Recorder rec;
 
 
     public TextMeshProUGUI text;
@@ -39,6 +40,8 @@ public class PlayerController : MonoBehaviour
     public bool imobilize;
     float imobTimer;
 
+    public GameObject jumpParticle, deadthParticle;
+
     /// <summary>
     /// TempPlatforms only
     /// </summary>
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        rec = transform.GetComponent<Recorder>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
@@ -149,7 +153,7 @@ public class PlayerController : MonoBehaviour
                 anim.Play("PlayerLand", 0, 0f);
                 landedAnim = true;
                 wallAnim = false;
-
+                Instantiate(jumpParticle,transform.position-new Vector3(0,0.5f,0),Quaternion.identity);
             }
             if (waitForGround)
             {
@@ -214,6 +218,7 @@ public class PlayerController : MonoBehaviour
             {
                 anim.Play("PlayerJump",0,0f);
                 landedAnim = false;
+                Instantiate(jumpParticle, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
                 if (leftWall)
                 {
                     rb.velocity = new Vector2(moveSpeed, jumpForce);
@@ -259,6 +264,11 @@ public class PlayerController : MonoBehaviour
             //skrivame duhcheto
             transform.GetComponent<Recorder>().cc = other.transform.GetComponent<CopyCat>();
             other.gameObject.SetActive(false);
+        }
+        if (other.CompareTag("Death"))
+        {
+            Instantiate(deadthParticle, transform.position - new Vector3(0, 0.25f, 0), Quaternion.identity);
+            rec.Restart();
         }
 
     }

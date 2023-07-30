@@ -8,6 +8,8 @@ TagManager:
   - Ghost
   - TempPlatform
   - SafePoint
+  - Death
+  - Escape
   layers:
   - Default
   - TransparentFX

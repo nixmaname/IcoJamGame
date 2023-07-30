@@ -46,15 +46,27 @@ public class CopyCat : MonoBehaviour
     }
     private void OnDisable()
     {
-        Instantiate(prefabAnim,transform.position,Quaternion.identity);
+        Instantiate(prefabAnim, transform.position, Quaternion.identity);
         //Restartirame
-        col.enabled = false;
+        AngelReset();
+
+    }
+    public void AngelReset()
+    {
+
         rec.Clear();
         timer = 0;
         stop = false;
         counter = 0;
+
+        if (col != null)
+        {
+            if (col.enabled)
+                col.enabled = false;
+        }
+
         leftWing.SetActive(false);
         rightWing.SetActive(false);
-
+        gameObject.SetActive(false);
     }
 }
