@@ -33,6 +33,11 @@ public class PlayerController : MonoBehaviour
     bool waitForGround, hasflipped;
     bool facingRight = true;
     SpriteRenderer sr;
+    Animator anim;
+    bool landedAnim, wallAnim;
+
+    public bool imobilize;
+    float imobTimer;
 
     /// <summary>
     /// TempPlatforms only
@@ -46,6 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityInc; // Adjust the gravity to your preference
@@ -60,6 +66,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
+        if (imobilize)
+        {
+            imobTimer += Time.deltaTime;
+            rb.velocity = Vector2.zero;
+            if(imobTimer> .45f)
+            {
+                imobilize = false;
+                imobTimer = 0;
+            }
+            return;
+        }
+
         if (timerDisplay > 0)
         {
             timerDisplay -= Time.deltaTime;
@@ -107,6 +126,11 @@ public class PlayerController : MonoBehaviour
 
         if (leftWall || rightWall)
         {
+            if (!wallAnim)
+            {
+                anim.Play("Player2", 0, 0f);
+                wallAnim = true;
+            }
             if (col.isTrigger)
             {
                 col.isTrigger = false;
@@ -120,6 +144,13 @@ public class PlayerController : MonoBehaviour
         }
         if (isGrounded)
         {
+            if (!landedAnim)
+            {
+                anim.Play("PlayerLand", 0, 0f);
+                landedAnim = true;
+                wallAnim = false;
+
+            }
             if (waitForGround)
             {
                 ResetRecorder();
@@ -181,6 +212,8 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                anim.Play("PlayerJump",0,0f);
+                landedAnim = false;
                 if (leftWall)
                 {
                     rb.velocity = new Vector2(moveSpeed, jumpForce);
@@ -260,6 +293,8 @@ public class PlayerController : MonoBehaviour
         dp.AnimStart();
         colTemp = null;
     }
+
+    
 
     void CallTempCoroutine()
     {

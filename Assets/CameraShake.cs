@@ -7,7 +7,7 @@ public class CameraShake : MonoBehaviour
 {
     public float shakeTime;
 
-    public ParticleSystem explosion;
+    public GameObject explosion;
 
     public TextMeshProUGUI timerText;
 
@@ -44,13 +44,28 @@ public class CameraShake : MonoBehaviour
         while (timeLeft >= 0)
         {
             timeLeft -= Time.deltaTime;
-            timerText.text = timeLeft.ToString("F1") + "...";
-            Debug.Log((int)timeLeft);
+            timerText.text = timeLeft.ToString("F1");
+            if (timeLeft > 2)
+            {
+                timerText.color = new Color(0,1,0,0.4f);
+            }
+            else if (timeLeft > 1)
+            {
+                timerText.color = new Color(1,0.92f,0.016f,0.4f);
+            }
+            else if (timeLeft > 0.5f)
+            {
+                timerText.color = new Color(1f,0.7f,0f,0.4f);
+            }
+            else
+            {
+                timerText.color = new Color(1,0,0,0.4f);
+            }
             yield return null;
         }
         timerText.text = "";
         Skaking(5f, 0.1f);
-        
+
         //CinemachineBasicMultiChannelPerlin noice = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         //explosion.Play();
         //noice.m_AmplitudeGain = intensity;
@@ -61,7 +76,7 @@ public class CameraShake : MonoBehaviour
     void Skaking(float intensity, float time)
     {
         CinemachineBasicMultiChannelPerlin noice = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        explosion.Play();
+        Instantiate(explosion,rec.transform.position,Quaternion.identity);
         noice.m_AmplitudeGain = intensity;
 
         shakeTime = time;

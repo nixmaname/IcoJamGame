@@ -15,6 +15,8 @@ public class CopyCat : MonoBehaviour
 
     GameObject leftWing, rightWing;
 
+    public GameObject prefabAnim;
+
 
     private void Start()
     {
@@ -44,6 +46,7 @@ public class CopyCat : MonoBehaviour
     }
     private void OnDisable()
     {
+        Instantiate(prefabAnim,transform.position,Quaternion.identity);
         //Restartirame
         col.enabled = false;
         rec.Clear();

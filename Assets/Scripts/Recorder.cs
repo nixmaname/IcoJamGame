@@ -66,6 +66,7 @@ public class Recorder : MonoBehaviour
     }
     public void Unalive()
     {
+        transform.GetComponent<PlayerController>().imobilize = true;
         cc.gameObject.SetActive(true);
         if (timer - averageFps >= 0)
         {
@@ -80,7 +81,6 @@ public class Recorder : MonoBehaviour
         cc.transform.position = transform.position;
         cc = null;
         canRecord = false;
-
-
     }
+    
 }
