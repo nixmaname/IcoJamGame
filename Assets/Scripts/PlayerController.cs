@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     public GameObject jumpParticle, deadthParticle;
 
     public AudioSource playerSounds;
-    public AudioClip coinSFX, jumpSFX;
+    public AudioClip coinSFX, jumpSFX,dieSFX;
 
     /// <summary>
     /// TempPlatforms only
@@ -260,6 +260,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Ghost"))
         {
+            playerSounds.clip = jumpSFX;
+            playerSounds.Play();
             //Skachame
             waitForGround = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -272,6 +274,8 @@ public class PlayerController : MonoBehaviour
         }
         if (other.CompareTag("Death"))
         {
+            playerSounds.clip = dieSFX;
+            playerSounds.Play();
             Instantiate(deadthParticle, transform.position - new Vector3(0, 0.25f, 0), Quaternion.identity);
             rec.Restart();
         }

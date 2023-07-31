@@ -26185,6 +26185,7 @@ MonoBehaviour:
   playerSounds: {fileID: 428310056}
   coinSFX: {fileID: 8300000, guid: e00b5b12a1500a447b4f6895d4c16676, type: 3}
   jumpSFX: {fileID: 8300000, guid: a4ab0121641be00428cf24c5fcb2169f, type: 3}
+  dieSFX: {fileID: 8300000, guid: c0567c3f5bcabfa418b60ec24c7b36a1, type: 3}
 --- !u!50 &2065584533
 Rigidbody2D:
   serializedVersion: 4
