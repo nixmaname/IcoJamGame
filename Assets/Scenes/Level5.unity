@@ -1772,7 +1772,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9, y: 0.75, z: -10}
+  m_LocalPosition: {x: -9, y: 0.775, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2477,17 +2477,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2412506319880221943, guid: 489480094fd895c4abb20e94f6fa1aac, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 6.51
-      objectReference: {fileID: 0}
     - target: {fileID: 4583605548118590594, guid: 489480094fd895c4abb20e94f6fa1aac, type: 3}
       propertyPath: m_Name
       value: EnemyAttacking
-      objectReference: {fileID: 0}
-    - target: {fileID: 9014488842050894275, guid: 489480094fd895c4abb20e94f6fa1aac, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.6099997
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12372,7 +12364,7 @@ Transform:
   m_GameObject: {fileID: 2141673806146904526}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9, y: 0.75, z: 0}
+  m_LocalPosition: {x: -9, y: 0.775, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
