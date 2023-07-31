@@ -42,6 +42,9 @@ public class PlayerController : MonoBehaviour
 
     public GameObject jumpParticle, deadthParticle;
 
+    public AudioSource playerSounds;
+    public AudioClip coinSFX, jumpSFX;
+
     /// <summary>
     /// TempPlatforms only
     /// </summary>
@@ -216,6 +219,8 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                playerSounds.clip = jumpSFX;
+                playerSounds.Play();
                 anim.Play("PlayerJump",0,0f);
                 landedAnim = false;
                 Instantiate(jumpParticle, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
@@ -272,6 +277,8 @@ public class PlayerController : MonoBehaviour
         }
         if (other.CompareTag("Coin"))
         {
+            playerSounds.clip = coinSFX;
+            playerSounds.Play();
             other.gameObject.SetActive(false);
         }
 

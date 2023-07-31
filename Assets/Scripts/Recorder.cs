@@ -22,6 +22,9 @@ public class Recorder : MonoBehaviour
     GameObject[] phantomPlatform;
     GameObject[] phantomCoin;
 
+    public AudioSource aud;
+    public AudioClip countSFX;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +35,7 @@ public class Recorder : MonoBehaviour
         platforms = GameObject.FindGameObjectsWithTag("TempPlatform");
         phantomPlatform = GameObject.FindGameObjectsWithTag("PhantomP");
         phantomCoin = GameObject.FindGameObjectsWithTag("Coin");
+        aud = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -70,6 +74,8 @@ public class Recorder : MonoBehaviour
         // timerite slujat za tyrsene na keys v dictionaritata
         if (Input.GetKeyDown(KeyCode.F) && cc != null && canPress)
         {
+            aud.clip = countSFX;
+            aud.Play();
             camShake.StartCoroutine(camShake.Shake());
 
             canPress = false;
