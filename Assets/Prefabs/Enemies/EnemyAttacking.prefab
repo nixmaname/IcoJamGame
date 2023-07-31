@@ -166,6 +166,9 @@ MonoBehaviour:
   vertical: 0
   state: 0
   chasingSpeed: 5
+  waypointA: {fileID: 9014488842050894275}
+  waypointB: {fileID: 2412506319880221943}
+  target: {fileID: 0}
 --- !u!95 &3767501265101833378
 Animator:
   serializedVersion: 5
@@ -213,7 +216,7 @@ Transform:
   m_GameObject: {fileID: 4207367743407808578}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.01, y: 0, z: 0}
+  m_LocalPosition: {x: 6.51, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -314,7 +317,7 @@ Transform:
   m_GameObject: {fileID: 8488907921024846559}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.11, y: 0, z: 0}
+  m_LocalPosition: {x: -4.6099997, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
