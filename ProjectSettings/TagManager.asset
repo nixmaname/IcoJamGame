@@ -13,6 +13,7 @@ TagManager:
   - Coin
   - PhantomP
   - LevelPanel
+  - EndLevel
   layers:
   - Default
   - TransparentFX
