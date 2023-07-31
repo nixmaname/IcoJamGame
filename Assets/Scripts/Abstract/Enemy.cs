@@ -6,25 +6,30 @@ public abstract class Enemy : MonoBehaviour
 
     public bool vertical;
 
-    private bool isFacingRight;
+    protected bool isFacingRight;
 
     public virtual void Moving()
     {
-        transform.Translate(Vector2.right * speed * Time.deltaTime, Space.Self);
+        Vector2 moveDir = !isFacingRight ? Vector2.right : Vector2.left;
+        transform.Translate(moveDir * speed * Time.deltaTime, Space.Self);
     }
 
     public void Flip()
     {
+        Vector3 currentScale = transform.localScale;
+        currentScale.x *= -1;
+        transform.localScale = currentScale;
+
         isFacingRight = !isFacingRight;
 
-        if (isFacingRight)
-        {
-            transform.eulerAngles = !vertical ? new Vector3(0f, -180f, 0f) : new Vector3(-180f, 0f, 90f);
-        }
-        else
-        {
-            transform.eulerAngles = !vertical ? Vector3.zero : new Vector3(0f, 0f, 90f);
-        }
+        //if (isFacingRight)
+        //{
+        //    transform.eulerAngles = !vertical ? new Vector3(0f, -180f, 0f) : new Vector3(-180f, 0f, 90f);
+        //}
+        //else
+        //{
+        //    transform.eulerAngles = !vertical ? Vector3.zero : new Vector3(0f, 0f, 90f);
+        //}
     }
 
 
