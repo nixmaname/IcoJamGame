@@ -6,11 +6,12 @@ public abstract class Enemy : MonoBehaviour
 
     public bool vertical;
 
-    protected bool isFacingRight;
+    public bool isFacingRight = true;
 
     public virtual void Moving()
     {
-        Vector2 moveDir = !isFacingRight ? Vector2.right : Vector2.left;
+        Vector2 moveDir = isFacingRight ? Vector2.right : Vector2.left;
+        Debug.Log(moveDir);
         transform.Translate(moveDir * speed * Time.deltaTime, Space.Self);
     }
 

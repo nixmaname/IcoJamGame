@@ -8,9 +8,7 @@ public class AttackingEnemy : Enemy
 
     public Transform waypointA, waypointB;
 
-    [SerializeField]Transform target;
-
-
+    private Transform target;
 
     private void Update()
     {
@@ -68,11 +66,11 @@ public class AttackingEnemy : Enemy
         {
             Vector2 dir = (target.transform.position - transform.position).normalized;
 
-            float dotProduct = Vector2.Dot(transform.position.normalized, dir.normalized);
+            float dotProduct = Vector2.Dot(transform.right, dir.normalized);
 
-            if (dotProduct < 0 && !isFacingRight)
+            if (dotProduct < 0 && isFacingRight)
                 Flip();
-            else if (dotProduct > 0 && isFacingRight)
+            else if (dotProduct > 0 && !isFacingRight)
                 Flip();
 
             transform.Translate(new Vector2(dir.x * chasingSpeed * Time.deltaTime, 0));

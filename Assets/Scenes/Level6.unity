@@ -9791,9 +9791,17 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -2.75
       objectReference: {fileID: 0}
+    - target: {fileID: 2034115314061516482, guid: 489480094fd895c4abb20e94f6fa1aac, type: 3}
+      propertyPath: isFacingRight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2412506319880221943, guid: 489480094fd895c4abb20e94f6fa1aac, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.7399998
+      objectReference: {fileID: 0}
+    - target: {fileID: 4412014640225145488, guid: 489480094fd895c4abb20e94f6fa1aac, type: 3}
+      propertyPath: m_FlipX
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4583605548118590594, guid: 489480094fd895c4abb20e94f6fa1aac, type: 3}
       propertyPath: m_Name

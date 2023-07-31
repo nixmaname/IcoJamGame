@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -1028071223, guid: 6b719bf8058996c428f9dc0524932c6c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 0.5}
@@ -168,7 +168,6 @@ MonoBehaviour:
   chasingSpeed: 5
   waypointA: {fileID: 9014488842050894275}
   waypointB: {fileID: 2412506319880221943}
-  target: {fileID: 0}
 --- !u!95 &3767501265101833378
 Animator:
   serializedVersion: 5
