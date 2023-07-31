@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public bool cannotMove = false;
     private Vector2 jumpTo;
     private BoxCollider2D col;
+    Recorder rec;
 
 
     public TextMeshProUGUI text;
@@ -33,6 +34,16 @@ public class PlayerController : MonoBehaviour
     bool waitForGround, hasflipped;
     bool facingRight = true;
     SpriteRenderer sr;
+    Animator anim;
+    bool landedAnim, wallAnim;
+
+    public bool imobilize;
+    float imobTimer;
+
+    public GameObject jumpParticle, deadthParticle;
+
+    public AudioSource playerSounds;
+    public AudioClip coinSFX, jumpSFX,dieSFX;
 
     /// <summary>
     /// TempPlatforms only
@@ -41,11 +52,13 @@ public class PlayerController : MonoBehaviour
 
     private float timer = 0;
     private float elapsedTime = 3;
-    
+
     private Collider2D colTemp;
 
     private void Awake()
     {
+        rec = transform.GetComponent<Recorder>();
+        anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityInc; // Adjust the gravity to your preference
@@ -60,6 +73,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
+        if (imobilize)
+        {
+            imobTimer += Time.deltaTime;
+            rb.velocity = Vector2.zero;
+            if(imobTimer> .45f)
+            {
+                imobilize = false;
+                imobTimer = 0;
+            }
+            return;
+        }
+
         if (timerDisplay > 0)
         {
             timerDisplay -= Time.deltaTime;
@@ -85,7 +111,16 @@ public class PlayerController : MonoBehaviour
         {
             //Ako otivame nadolu imame collider i mojem da checkvame grounda
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-            colTemp = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerTemp);
+            if (colTemp == null)
+                colTemp = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerTemp);
+            else
+            {
+                Collider2D temp = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerTemp);
+                if(temp != colTemp)
+                {
+                    DestroyPlatform();
+                }
+            }
 
             col.isTrigger = false;
         }
@@ -98,6 +133,11 @@ public class PlayerController : MonoBehaviour
 
         if (leftWall || rightWall)
         {
+            if (!wallAnim)
+            {
+                anim.Play("Player2", 0, 0f);
+                wallAnim = true;
+            }
             if (col.isTrigger)
             {
                 col.isTrigger = false;
@@ -111,6 +151,13 @@ public class PlayerController : MonoBehaviour
         }
         if (isGrounded)
         {
+            if (!landedAnim)
+            {
+                anim.Play("PlayerLand", 0, 0f);
+                landedAnim = true;
+                wallAnim = false;
+                Instantiate(jumpParticle,transform.position-new Vector3(0,0.5f,0),Quaternion.identity);
+            }
             if (waitForGround)
             {
                 ResetRecorder();
@@ -172,6 +219,11 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                playerSounds.clip = jumpSFX;
+                playerSounds.Play();
+                anim.Play("PlayerJump",0,0f);
+                landedAnim = false;
+                Instantiate(jumpParticle, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
                 if (leftWall)
                 {
                     rb.velocity = new Vector2(moveSpeed, jumpForce);
@@ -192,10 +244,15 @@ public class PlayerController : MonoBehaviour
                     rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                     coyoteTimer = 0f; // Reset the timer after the jump
                 }
+
+                if(colTemp != null)
+                {
+                    DestroyPlatform();
+                }
             }
         }
 
-        CallTempCoroutine();
+        //CallTempCoroutine();
 
     }
 
@@ -203,6 +260,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Ghost"))
         {
+            playerSounds.clip = jumpSFX;
+            playerSounds.Play();
             //Skachame
             waitForGround = true;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -211,6 +270,19 @@ public class PlayerController : MonoBehaviour
 
             //skrivame duhcheto
             transform.GetComponent<Recorder>().cc = other.transform.GetComponent<CopyCat>();
+            other.gameObject.SetActive(false);
+        }
+        if (other.CompareTag("Death"))
+        {
+            playerSounds.clip = dieSFX;
+            playerSounds.Play();
+            Instantiate(deadthParticle, transform.position - new Vector3(0, 0.25f, 0), Quaternion.identity);
+            rec.Restart();
+        }
+        if (other.CompareTag("Coin"))
+        {
+            playerSounds.clip = coinSFX;
+            playerSounds.Play();
             other.gameObject.SetActive(false);
         }
 
@@ -240,13 +312,23 @@ public class PlayerController : MonoBehaviour
 
 
 
+    void DestroyPlatform()
+    {
+        DyingPlatform dp = colTemp.GetComponent<DyingPlatform>();
+        dp.AnimStart();
+        colTemp = null;
+    }
+
+    
+
     void CallTempCoroutine()
     {
         if (colTemp != null)
         {
             elapsedTime -= Time.deltaTime;
             text.text = elapsedTime.ToString("0") + "...";
-            if (elapsedTime <= timer) {
+            if (elapsedTime <= timer)
+            {
                 Destroy(colTemp.gameObject);
                 elapsedTime = 0;
                 text.text = "";

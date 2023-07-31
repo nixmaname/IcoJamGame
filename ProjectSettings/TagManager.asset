@@ -7,6 +7,13 @@ TagManager:
   - Waypoint
   - Ghost
   - TempPlatform
+  - SafePoint
+  - Death
+  - Escape
+  - Coin
+  - PhantomP
+  - LevelPanel
+  - EndLevel
   layers:
   - Default
   - TransparentFX
